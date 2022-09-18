@@ -1,0 +1,50 @@
+#
+# ytd - grid - video - renderer  # video-title.yt-simple-endpoint.ytd-grid-video-renderer {
+#
+#
+# <a id="video-title"
+# class="yt-simple-endpoint style-scope ytd-grid-video-renderer"
+# aria-label="Live Q&amp;A- Ask Anything Related Data Science by Krish Naik Streamed 20 hours ago 1 hour, 8 minutes 7,449 views"
+# title="Live Q&amp;A- Ask Anything Related Data Science"
+# href="/watch?v=hCTbdXh9P5I&amp;t=2s">Live Q&amp;A- Ask Anything Related Data Science</a>
+#
+# <yt-formatted-string force-default-style=""
+# class="style-scope ytd-watch-metadata">Live Q&amp;A- Ask Anything Related Data Science</yt-formatted-string>
+
+# html = driver.find_element_by_tag_name('html')
+# html.send_keys(Keys.PAGE_DOWN)
+
+alert = driver.switch_to.alert
+driver.find_element(By.XPATH, '//button[text()="Some text"]')
+
+continue_link = driver.find_element(By.LINK_TEXT, 'Continue')
+
+
+    # def scroll_to_end():
+    #     last_height = driver.execute_script("return document.body.scrollHeight")
+    #     while True:
+    #         print("Scroll down to bottom")
+    #         # Scroll down to bottom
+    #         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    #
+    #         # Wait to load page
+    #         time.sleep(interaction_time)
+    #
+    #         # Calculate new scroll height and compare with last scroll height
+    #         new_height = driver.execute_script("return document.body.scrollHeight")
+    #         if new_height == last_height:
+    #             break
+    #
+    #         last_height = new_height
+style-scope yt-button-renderer style-text size-default
+
+WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='pic' and @id='pic'][@data-type='image']"))).value_of_css_property("background-image").split('"')[1]
+xpath = //div[@class='pic' and @id='pic'][@data-type='image']
+
+
+    ignored_exceptions = (NoSuchElementException, StaleElementReferenceException,)
+    your_element = WebDriverWait(your_driver, some_timeout, ignored_exceptions=ignored_exceptions) \
+        .until(expected_conditions.presence_of_element_located((By.ID, my_element_id)))
+
+videos_list_el = WebDriverWait(driver, 3, ignored_exceptions='NoSuchElementException' or 'StaleElementReferenceException')\
+            .until(ec.visibility_of_element_located((By.CSS_SELECTOR, '#video-title.yt-simple-endpoint.style-scope.ytd-grid-video-renderer')))
