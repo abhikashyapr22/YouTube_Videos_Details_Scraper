@@ -2,15 +2,36 @@
 {% block title %} Home{% endblock title %}
 {% block body %}
 
-<!--table for showing results-->
-<table class="table caption-top">
-  <caption>YouTube Video Details</caption>
-  <thead class="table-light">
-    ...
-  </thead>
-  <tbody>
-    ...
-  </tbody>
-</table>
+<!--error message-->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<div style="display: inline;">
+    <div style="width:480px; height:360px;">
+        {% for data in vdata %}
+            <img src={{data.thumbnail}} alt={{data.title}}>
+        {% endfor %}
+    </div>
+    <div style="width:899.337px; height:360px;">
+        {% for data in vdata %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{data.title}}</li>
+               <li class="list-group-item"><a href = {{data.url}} >Watch on YouTube</a></li>
+               <li class="list-group-item">Views: {{data.views}}</li>
+               <li class="list-group-item">Likes: {{data.likes}}</li>
+               <li class="list-group-item">Total comments: {{data.comments}}</li>
+                <li class="list-group-item"><a href="#">Get comments</a></li>
+                <li class="list-group-item"><a href="#">Download Video</a></li>
+            </ul>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock body %}

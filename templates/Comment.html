@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %} Home{% endblock title %}
+{% block body %}
+
+<!--error message-->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<div style="padding: 0px 100px 50px 100px">
+    <!--table for showing results-->
+    <div>
+        <h5>YouTube Video Details</h5>
+        {% if data %}
+            <form action="{{url_for('save')}}" method="post" style="float:right">
+                <button type="submit" name="data" value={{data}}>Download comments</button>
+                <select name="format" style="padding: 2px 2px 2px 2px;">
+    <!--                <option value="pdf">pdf</option>-->
+                    <option value="csv">csv</option>
+                    <option value="txt">txt</option>
+                </select>
+            </form>
+        {% endif %}
+    </div>
+    <table class="table caption-top">
+
+        <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for name, comment in data %}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{comment}}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+    </table>
+</div>
+
+{% endblock body %}
+
+
+<!--<form action="#" method="post">-->
+<!--                 <input type="submit" name="url" value={{data.url}}/>-->
+<!--                 <button type="submit" class="btn"><i class="fa fa-download">Download Video</button>-->
+<!--                 <button type="submit" formaction="#" name="url" value={{data.url}} class="btn btn-link">Get Comments</button>-->
+<!--            </form>-->

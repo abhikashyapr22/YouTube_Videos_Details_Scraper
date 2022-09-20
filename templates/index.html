@@ -2,12 +2,26 @@
 {% block title %} Home{% endblock title %}
 {% block body %}
 
+<!--error message-->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 <!--Form for search (Horizontal Centering)-->
 <div class="mx-auto" style="width: 500px;">
-  <form class="d-flex padding" action="/" >
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width: 100%">
+  <form class="d-flex padding" action="/get_video_details" method="post">
+        <input class="form-control me-2" type="search" name ="url" placeholder="Search" aria-label="Search" style="width: 100%" required>
         <button class="btn btn-outline-success" type="submit">Search</button>
   </form>
 </div>
-
+<div class="mx-auto" style="width: 800px; padding-left:20ps;">
+    <h3>Please enter the url of home page of channel, you want to scrape :)</h3>
+    <img src="/static/images/home.jpg" alt="user instruction" style="width:auto; height:360px;">
+</div>
 {% endblock body %}

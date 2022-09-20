@@ -48,3 +48,33 @@ xpath = //div[@class='pic' and @id='pic'][@data-type='image']
 
 videos_list_el = WebDriverWait(driver, 3, ignored_exceptions='NoSuchElementException' or 'StaleElementReferenceException')\
             .until(ec.visibility_of_element_located((By.CSS_SELECTOR, '#video-title.yt-simple-endpoint.style-scope.ytd-grid-video-renderer')))
+
+
+# if quality == 'Low':
+        #     video = yt.streams.get_lowest_resolution()
+        # elif quality == 'Medium':
+        #
+        #     video = not (not yt.streams.get_by_resolution("360p") and not yt.streams.get_by_resolution(
+        #         "480p")) or yt.streams.get_by_resolution("720p")
+        # else:
+        #     video = yt.streams.get_highest_resolution()
+
+        # try:
+        #     # downloading the video
+        #     video.download(path)
+        # except:
+        #     print("There is some Error!")
+        # else:
+        #     print('Videos Download Successfully!')
+
+ #path = "C:/Users/abhi/Downloads"
+        #path = '/static/downloads'
+        #quality = 'Medium'
+
+<select name="resolution">
+                  {% session['link'] = data.url %}
+                  {% url = YouTube(session['link']) %}
+                  {% for i in YouTube(url, use_oauth=False, allow_oauth_cache=True).stream.filter(progressive=True) %}
+                    <option value="{{i.resolution}}">{{i.resolution}}</option>
+                  {% endfor %}
+              </select>

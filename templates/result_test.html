@@ -1,0 +1,43 @@
+
+{% extends 'base.html' %}
+{% block title %} Home{% endblock title %}
+{% block body %}
+
+<!--error message-->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for data in vdata %}
+    <div class="column">
+      <div class="card h-100" style="width:100%; height:360px;">
+        <img src={{data.thumbnail}} class="card-img-top" alt="thumbnail not found">
+        <div class="card-body" style="margin-bottom:0px; padding-bottom:0px;">
+            <h6 class="card-title">{{data.title}}</h6>
+            <div><a href = {{data.url}} >Watch on YouTube</a></div>
+            <div>Views: {{data.views}}</div>
+            <div>Likes: {{data.likes}}</div>
+            <div>Comments: {{data.comments}}</div>
+        </div>
+          <div>
+              <form action="{{url_for('download_video')}}" method="post" style="margin:0;padding:0px 0px 10px 10px;" class="column">
+                  <input type="hidden" name="title" value="{{data.title}}">
+                  <button type="submit" name="url" value={{data.url}} style="margin-left:0px;">Download</button>
+              </form>
+              <form action="{{url_for('get_comments')}}" method="post" style="margin:0;padding:0px 0px 10px 10px; float: left;" class="column">
+                  <button type="submit" name="url" value={{data.url}} style="margin-left:0px;">Get Comments</button>
+              </form>
+          </div>
+      </div>
+    </div>
+ {% endfor %}
+</div>
+
+{% endblock body %}

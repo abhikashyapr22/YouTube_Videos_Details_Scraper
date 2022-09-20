@@ -11,30 +11,9 @@ url = 'https://www.youtube.com/watch?v=etzmAZ7oiz0'
 driver.get(url)
 time.sleep(3)
 
-title = "Not found"
-videotitle = "Not found"
 final_comment_list = []
 author_list = []
 comment_list = []
-
-# incase selenium did not work
-header = {
-    "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
-}
-
-response = requests.get(url, headers=header)
-soup1 = BeautifulSoup(response.text, "html.parser")
-# incase selenium did not work - end
-
-soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-try:
-    title = soup.select_one('#container h1').text  # working
-except:
-    print("trying another method for title")
-else:
-    title_soup_meta = soup1.find("meta", property="og:title")
-    videotitle = title_soup_meta["content"] if title_soup_meta else "NotFound"
 
 last_height = driver.execute_script("return document.body.scrollHeight")
 html = driver.find_element(By.TAG_NAME, 'html')
@@ -60,7 +39,7 @@ while True:
     except:
         print(f"not able to find comments for {url} video")
 
-    obj1 = dict(title=title if title else videotitle, author_list=author_list, comment_list=comment_list)
+    obj1 = dict(author_list=author_list, comment_list=comment_list)
     final_comment_list.append(obj1)
 
     # Calculate new scroll height and compare with last scroll height
