@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, send_file, session, get_flashed_messages
+from flask import Flask, render_template, redirect, url_for, request, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -11,7 +11,6 @@ from flask_pymongo import PyMongo
 import pandas as pd
 import logging
 from io import BytesIO
-import pymongo
 import time
 import os
 import requests
@@ -21,8 +20,14 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 mongo = PyMongo(app)
 
-option = webdriver.ChromeOptions()
-option.add_argument("__headless")
+# option.add_argument("__headless")
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+options.add_argument('window-size=1920x1080')
+options.add_argument("disable-gpu")
+# OR options.add_argument("--disable-gpu")
+
+driver = webdriver.Chrome('chromedriver', chrome_options=options)
 
 # configuring database for the app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///video_details.sqlite3'
@@ -57,7 +62,8 @@ db.create_all()
 def index():
     return render_template('index.html')
 
-def get_videos_url(driver, go_url: str, max_links: int, interaction_time: int = 1):
+
+def get_videos_url(go_url: str, max_links: int, interaction_time: int = 1):
     logging.basicConfig(filename="scraper_app.log", level=logging.INFO,
                         format='%(levelname)s %(asctime)s %(name)s %(message)s')
     """
@@ -107,16 +113,17 @@ def get_video_details():
         ch_link = str(request.form['url'])
         max_links = 1
         interaction_time = 1
-        driver = webdriver.Chrome(options=option)
+
+        # driver = webdriver.Chrome(options=options)
         # driver.implicitly_wait(5)
 
-        urls = get_videos_url(driver, ch_link, max_links, interaction_time)
+        urls = get_videos_url(ch_link, max_links, interaction_time)
 
         if urls == 'None':
             flash("Something went wrong! Please refresh the page or try with different url")
             return redirect(url_for('/'))
 
-        vdetails = []
+        # vdetails = []
         for url in urls:
             """global default variables """
             title = "not found"
@@ -194,7 +201,7 @@ def get_video_details():
             # obj = dict(title=title if title else videotitle, url=url, views=views, likes=likes, comments=nc,
             #            thumbnail=v_img if v_img else videoimage)
 
-            #vdetails.append(obj)
+            # vdetails.append(obj)
 
             insert_data = VideoDetails(title=title if title else videotitle, url=url, views=views, likes=likes, comments=nc, thumbnail=v_img if v_img else videoimage)
             db.session.add(insert_data)
@@ -237,7 +244,7 @@ def download_video():
 def get_comments():
     if request.method == "POST":
         url = request.form['url']
-        driver = webdriver.Chrome()
+        # driver = webdriver.Chrome()
 
         yt = YouTube(url, use_oauth=False, allow_oauth_cache=True)
         v_id = yt.video_id
@@ -300,6 +307,7 @@ def get_comments():
     else:
         return render_template('result_test.html', vdata=VideoDetails.query.all())
 
+
 @app.route('/save', methods=['POST', 'GET'])
 def save_comments():
     if request.method == 'POST':
@@ -322,6 +330,7 @@ def save_comments():
         return render_template('result_test.html', vdata=VideoDetails.query.all())
     else:
         return render_template('result_test.html', vdata=VideoDetails.query.all())
+
 
 if __name__ == '__main__':
     app.run(debug=False)
