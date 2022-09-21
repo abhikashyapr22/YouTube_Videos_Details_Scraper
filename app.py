@@ -8,9 +8,11 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from bs4 import BeautifulSoup
 from pytube import YouTube
+from flask_pymongo import PyMongo
 import pandas as pd
 import logging
 from io import BytesIO
+import pymongo
 import time
 import os
 import re
@@ -18,6 +20,9 @@ import json
 import requests
 
 app = Flask(__name__)
+
+app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+mongo = PyMongo(app)
 
 option = webdriver.ChromeOptions()
 option.add_argument("__headless")
@@ -236,12 +241,13 @@ def get_comments():
     if request.method == "POST":
         url = request.form['url']
         driver = webdriver.Chrome()
-        # url = 'https://www.youtube.com/watch?v=etzmAZ7oiz0'
+
+        yt = YouTube(url, use_oauth=False, allow_oauth_cache=True)
+        v_id = yt.video_id
 
         driver.get(url)
         time.sleep(3)
 
-        final_comment_list = []
         author_list = []
         comment_list = []
 
@@ -279,13 +285,26 @@ def get_comments():
             else:
                 last_height = new_height
 
+        data = {
+            "Name": author_list,
+            "Comment": comment_list
+        }
+        df = pd.DataFrame(data)
+
+        try:
+            mongo.save_file("comments.csv", df.to_csv())
+            mongo.send_file("comments.csv")
+            print("Done!")
+        except:
+            print("Check your connection")
+
         return render_template('comment.html', data=zip(author_list, comment_list))
 
     else:
         return render_template('result_test.html', vdata=VideoDetails.query.all())
 
 @app.route('/save', methods=['POST', 'GET'])
-def save():
+def save_comments():
     if request.method == 'POST':
         data = request.form['data']
         formt = request.form['format']

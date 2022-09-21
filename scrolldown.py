@@ -3,10 +3,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import requests
+import pymongo
+from pytube import YouTube
 import time
+
 
 driver = webdriver.Chrome()
 url = 'https://www.youtube.com/watch?v=etzmAZ7oiz0'
+
+client = pymongo.MongoClient(
+            "mongodb://root:root@cluster0-shard-00-00.juny6.mongodb.net:27017,cluster0-shard-00-01.juny6.mongodb.net:27017,cluster0-shard-00-02.juny6.mongodb.net:27017/?ssl=true&replicaSet=atlas-av6fij-shard-0&authSource=admin&retryWrites=true&w=majority")
+nosql_db = client.test
+print(nosql_db)
+yt = YouTube(url, use_oauth=False, allow_oauth_cache=True)
+v_id = yt.video_id
+
+nosql_db = client["YouTubeVideoInfo"]
+col = nosql_db["CommentsOnVideo"]
 
 driver.get(url)
 time.sleep(3)
@@ -39,8 +52,8 @@ while True:
     except:
         print(f"not able to find comments for {url} video")
 
-    obj1 = dict(author_list=author_list, comment_list=comment_list)
-    final_comment_list.append(obj1)
+    # obj1 = dict(author_list=author_list, comment_list=comment_list)
+    # final_comment_list.append(obj1)
 
     # Calculate new scroll height and compare with last scroll height
     new_height = driver.execute_script("return document.body.scrollHeight")
@@ -49,5 +62,12 @@ while True:
     else:
         last_height = new_height
 
-print(final_comment_list)
+data = dict(Name=author_list, Comment=comment_list)
+
+try:
+    col.insert_one(data)
+    print("done")
+except:
+    print("Check your connection")
+
 print(len(author_list))

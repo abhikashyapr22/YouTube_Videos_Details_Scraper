@@ -18,7 +18,7 @@
     <div>
         <h5>YouTube Video Details</h5>
         {% if data %}
-            <form action="{{url_for('save')}}" method="post" style="float:right">
+            <form action="{{url_for('save_comments')}}" method="post" style="float:right">
                 <button type="submit" name="data" value={{data}}>Download comments</button>
                 <select name="format" style="padding: 2px 2px 2px 2px;">
     <!--                <option value="pdf">pdf</option>-->
