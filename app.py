@@ -27,8 +27,6 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 # OR options.add_argument("--disable-gpu")
 
-driver = webdriver.Chrome('chromedriver', chrome_options=options)
-
 # configuring database for the app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///video_details.sqlite3'
 
@@ -63,7 +61,7 @@ def index():
     return render_template('index.html')
 
 
-def get_videos_url(go_url: str, max_links: int, interaction_time: int = 1):
+def get_videos_url(driver, go_url: str, max_links: int, interaction_time: int = 1):
     logging.basicConfig(filename="scraper_app.log", level=logging.INFO,
                         format='%(levelname)s %(asctime)s %(name)s %(message)s')
     """
@@ -114,10 +112,10 @@ def get_video_details():
         max_links = 1
         interaction_time = 1
 
-        # driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(options=options)
         # driver.implicitly_wait(5)
 
-        urls = get_videos_url(ch_link, max_links, interaction_time)
+        urls = get_videos_url(driver, ch_link, max_links, interaction_time)
 
         if urls == 'None':
             flash("Something went wrong! Please refresh the page or try with different url")
@@ -244,7 +242,7 @@ def download_video():
 def get_comments():
     if request.method == "POST":
         url = request.form['url']
-        # driver = webdriver.Chrome()
+        driver = webdriver.Chrome()
 
         yt = YouTube(url, use_oauth=False, allow_oauth_cache=True)
         v_id = yt.video_id
