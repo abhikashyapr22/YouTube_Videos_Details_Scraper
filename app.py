@@ -20,11 +20,12 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 mongo = PyMongo(app)
 
-# option.add_argument("__headless")
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
-options.add_argument("disable-gpu")
+options.add_argument("__headless")
+# options = webdriver.ChromeOptions()
+# options.add_argument('headless')
+# options.add_argument('window-size=1920x1080')
+# options.add_argument("disable-gpu")
 # OR options.add_argument("--disable-gpu")
 
 # configuring database for the app
