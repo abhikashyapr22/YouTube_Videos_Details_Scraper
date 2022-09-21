@@ -324,4 +324,4 @@ def save_comments():
         return render_template('result_test.html', vdata=VideoDetails.query.all())
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5002)
+    app.run(debug=False)
