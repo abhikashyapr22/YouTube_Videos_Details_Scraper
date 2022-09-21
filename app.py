@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, send_file, session, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -15,8 +14,6 @@ from io import BytesIO
 import pymongo
 import time
 import os
-import re
-import json
 import requests
 
 app = Flask(__name__)
